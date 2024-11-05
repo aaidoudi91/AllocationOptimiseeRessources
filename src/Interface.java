@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 // Classe Interface : affiche et lis les données des colonies et colons dans le terminal
@@ -17,6 +16,7 @@ public class Interface{
             colonie.ajouterColon(nom);
         }
 
+        // Partie A
         boolean fin = false;
         while (!fin) {
             System.out.println("1) Ajouter une relation entre deux colons");
@@ -31,17 +31,25 @@ public class Interface{
                     System.out.print("Entrez le nom des deux colons : ");
                     String nom1 = scanner.next();
                     String nom2 = scanner.next();
-                    colonie.ajouterRelation(nom1, nom2);
+                    try {
+                        colonie.ajouterRelation(nom1, nom2);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Erreur : " + e.getMessage());
+                    }
                     break;
                 case 2:
                     System.out.print("Entrez le nom du colon et ses " + nombreColons + " préférences : ");
                     String nomColon = scanner.next();
-                    List<Integer> preferences = new ArrayList<>();
+                    ArrayList<Integer> preferences = new ArrayList<>();
                     // Lire les n préférences de l'utilisateur
                     for (int i = 0; i < nombreColons; i++) {
                         preferences.add(scanner.nextInt());
                     }
-                    colonie.ajouterPreferences(nomColon, preferences);
+                    try {
+                        colonie.ajouterPreferences(nomColon, preferences);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Erreur : " + e.getMessage());
+                    }
                     scanner.nextLine(); // Consomme la ligne restante
                     break;
 
@@ -56,6 +64,7 @@ public class Interface{
             }
         }
 
+        // Partie B
         fin = false;
         while (!fin) {
             System.out.println("1) Échanger les ressources de deux colons");
@@ -70,7 +79,11 @@ public class Interface{
                     System.out.print("Entrez le nom des deux colons : ");
                     String nom1 = scanner.next();
                     String nom2 = scanner.next();
-                    colonie.echangerRessources(nom1, nom2);
+                    try {
+                        colonie.echangerRessources(nom1, nom2);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Erreur : " + e.getMessage());
+                    }
                     break;
                 case 2:
                     System.out.println("Nombre de colons jaloux : " + colonie.calculerColonsJaloux());

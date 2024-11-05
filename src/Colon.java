@@ -1,11 +1,10 @@
 import java.util.ArrayList;
-import java.util.List;
 
 // Classe Colon : représente un colon dans la colonie avec ses préférences, relations et l'objet qui lui est assigné
 public class Colon {
     private String nom;
-    private List<Integer> preferences; // Liste triée des préférences d'objets du colon
-    private List<Colon> relations; // Liste des autres colons avec qui ce colon a des relations négatives
+    private ArrayList<Integer> preferences; // Liste triée des préférences d'objets du colon
+    private ArrayList<Colon> relations; // Liste des autres colons avec qui ce colon a des relations négatives
     private Integer objetAssigne; // Objet actuellement assigné au colon
 
     public Colon(String nom) {
@@ -28,10 +27,10 @@ public class Colon {
     public String getNom() {
         return nom;
     }
-    public List<Integer> getPreferences() {
+    public ArrayList<Integer> getPreferences() {
         return preferences;
     }
-    public List<Colon> getRelations() {
+    public ArrayList<Colon> getRelations() {
         return relations;
     }
     public Integer getObjetAssigne() {
