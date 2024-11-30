@@ -1,11 +1,12 @@
 import java.util.ArrayList;
+import java.util.Objects;
 
 // Classe Colon : représente un colon dans la colonie avec ses préférences, relations et l'objet qui lui est assigné
 public class Colon {
     private String nom;
-    private ArrayList<Integer> preferences; // Liste triée des préférences d'objets du colon
+    private ArrayList<String> preferences; // Liste triée des préférences d'objets du colon
     private ArrayList<Colon> relations; // Liste des autres colons avec qui ce colon a des relations négatives
-    private Integer objetAssigne; // Objet actuellement assigné au colon
+    private String objetAssigne; // Objet actuellement assigné au colon
 
     public Colon(String nom) {
         this.nom = nom;
@@ -15,10 +16,9 @@ public class Colon {
     }
 
     // Ajoute un objet à la liste des préférences du colon
-    public void ajouterPreference(int objet) {
+    public void ajouterPreference(String objet) {
         preferences.add(objet);
     }
-
     // Ajoute un autre colon à la liste des relations du colon
     public void ajouterRelation(Colon autreColon) {
         relations.add(autreColon);
@@ -27,21 +27,21 @@ public class Colon {
     public String getNom() {
         return nom;
     }
-    public ArrayList<Integer> getPreferences() {
-        return preferences;
-    }
+    public ArrayList<String> getPreferences() { return preferences; }
     public ArrayList<Colon> getRelations() {
         return relations;
     }
-    public Integer getObjetAssigne() {
+    public String getObjetAssigne() {
         return objetAssigne;
     }
 
     // Définit l'objet assigné au colon
-    public void setObjetAssigne(Integer objet) {
+    public void setObjetAssigne(String objet) {
         this.objetAssigne = objet;
     }
+    public void supprimerPreferences() {preferences.clear();}
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Colon: ").append(nom)
