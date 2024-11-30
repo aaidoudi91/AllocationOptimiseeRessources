@@ -64,7 +64,7 @@ public class Colonie {
                 complet = false;
             }
         }
-        System.out.println(sb);
+        if (!complet) System.out.println(sb);
         return complet;
     }
 
@@ -100,18 +100,15 @@ public class Colonie {
 
     // Échange les objets assignés entre deux colons
     public void echangerRessources(String nom1, String nom2) {
-        if (nom1 == null || nom1.isEmpty() || nom2 == null || nom2.isEmpty()) {
-            throw new IllegalArgumentException("Les noms des colons ne peuvent pas être nuls ou vides.");
-        }
         Colon colon1 = colons.get(nom1); // Récupère le premier colon par son nom
         Colon colon2 = colons.get(nom2);
-        if (colon1 != null && colon2 != null) { // Vérifie que les deux colons existent
-            String temp = colon1.getObjetAssigne(); // Stocke temporairement l'objet du premier colon
-            colon1.setObjetAssigne(colon2.getObjetAssigne()); // Affecte l'objet du second colon au premier
-            colon2.setObjetAssigne(temp); // Affecte l'objet initial du premier colon au second
-        } else {
-            System.out.println("Erreur : colon(s) introuvable(s)."); // Message d'erreur si un des colons n'existe pas
+        if (colon1 == null || colon2 == null) {
+            throw new IllegalArgumentException("Un ou les deux colons spécifiés n'existent pas.");
         }
+        String temp = colon1.getObjetAssigne(); // Stocke temporairement l'objet du premier colon
+        colon1.setObjetAssigne(colon2.getObjetAssigne()); // Affecte l'objet du second colon au premier
+        colon2.setObjetAssigne(temp); // Affecte l'objet initial du premier colon au second
+
     }
 
     // Méthode pour charger les données d'une colonie depuis un fichier texte
@@ -183,6 +180,9 @@ public class Colonie {
     public void enregistreFichier(String cheminFichier) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(cheminFichier));
         for (Colon colon : colons.values()) { // Écrit pour chaque colon de la colonie son nom et sa ressource donnée
+            if (colon.getObjetAssigne() == null){
+                throw new NullPointerException("Le colon " + colon.getNom() + " n'as pas de ressource assignée.");
+            }
             writer.write(colon.getNom() +":"+colon.getObjetAssigne()+"\n");
         }
         writer.close();
