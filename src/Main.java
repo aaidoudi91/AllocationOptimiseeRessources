@@ -7,7 +7,7 @@ public class Main {
      * Méthode principale qui est le point d'entrée de l'application.
      * Elle reçoit les arguments de la ligne de commande et lance l'application.
      * @param args Les arguments passés en ligne de commande qui seront transmis
-     *             à la méthode {@code lancer} de la classe {@code Menu}.
+     *             à la méthode lancer de la classe Menu
      */
     public static void main(String[] args) {
         Menu.lancer(args);

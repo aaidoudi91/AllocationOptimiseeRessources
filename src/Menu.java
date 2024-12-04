@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -66,22 +67,11 @@ class Menu {
             int choix = 0;
 
             valide = false;
-            while (!valide) { // Tant que l'utilisateur ne rentre pas un entier, on boucle
-                try {
-                    choix = Integer.parseInt(scanner.nextLine().trim()); // Déclenche une NumberFormatException si ce n'est pas un int
-                    if (choix != 1 && choix != 2 && choix != 3) {
-                        throw new InputMismatchException();
-                    }
-                    valide = true; // Si pas d'exception, sortie de la boucle
-                } catch (NumberFormatException | InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
-                    System.err.println("Erreur : veuillez entrer un entier entre 1 et 3");
-                }
-            }
+            choix = getChoix(scanner, choix, valide);
 
             switch (choix) {
                 case 1:
                     System.out.print("\nEntrez le nom des deux colons (format 'X Y'): ");
-                    valide = false;
 
                     while (!valide) {
                         String ligne = scanner.nextLine();
@@ -105,7 +95,6 @@ class Menu {
                 case 2:
                     System.out.print("\nEntrez le nom du colon et ses " + nombreColons + " préférences (format 'X 1 2 ..'): ");
                     ArrayList<String> preferences = new ArrayList<>();
-                    valide = false;
                     while (!valide) {
                         String ligne = scanner.nextLine();
                         String[] elements = ligne.split(" "); // Diviser la ligne en mots par les espaces
@@ -119,9 +108,7 @@ class Menu {
 
                             // Extraire les préférences
                             preferences.clear();
-                            for (int i = 1; i <= nombreColons; i++) {
-                                preferences.add(elements[i]);
-                            }
+                            preferences.addAll(Arrays.asList(elements).subList(1, nombreColons + 1));
 
                             // Tenter d'ajouter les préférences
                             colonie.ajouterPreferences(nomColon, preferences);
@@ -139,7 +126,7 @@ class Menu {
                 case 3:
                     if (colonie.verifierPreferencesCompletes()) { // Si les préférences sont completes, on affiche le résultat
                         colonie.assignerObjets();
-                        System.out.println(colonie.toString());
+                        System.out.println(colonie);
                         fin = true;
                     }
                     break;
@@ -158,22 +145,11 @@ class Menu {
             int choix = 0;
 
             valide = false;
-            while (!valide) { // Tant que l'utilisateur ne rentre pas un entier, on boucle
-                try {
-                    choix = Integer.parseInt(scanner.nextLine().trim()); // Déclenche une NumberFormatException si ce n'est pas un int
-                    if (choix != 1 && choix != 2 && choix != 3) {
-                        throw new InputMismatchException();
-                    }
-                    valide = true; // Si pas d'exception, sortie de la boucle
-                } catch (NumberFormatException | InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
-                    System.err.println("Erreur : veuillez entrer un entier entre 1 et 3");
-                }
-            }
+            choix = getChoix(scanner, choix, valide);
 
             switch (choix) {
                 case 1:
                     System.out.print("\nEntrez le nom des deux colons (format 'X Y'): ");
-                    valide = false;
                     while (!valide) {
                         String ligne = scanner.nextLine();
                         String[] noms = ligne.split(" "); // Diviser la ligne en mots par les espaces
@@ -203,7 +179,7 @@ class Menu {
                 default:
                     System.out.println("Option invalide. Réessayer.");
             }
-            System.out.println(colonie.toString());
+            System.out.println(colonie);
         }
         scanner.close();
     }
@@ -236,18 +212,7 @@ class Menu {
             int choix = 0;
 
             boolean valide = false;
-            while (!valide) { // Tant que l'utilisateur ne rentre pas un entier, on boucle
-                try {
-                    choix = scanner.nextInt();
-                    if (choix != 1 && choix != 2 && choix != 3) {
-                        throw new InputMismatchException();
-                    }
-                    valide = true; // Si pas d'exception, sortie de la boucle
-                } catch (InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
-                    System.err.println("Erreur : veuillez entrer un entier entre 1 et 3");
-                    scanner.nextLine(); // Vide le tampon d'entrée
-                }
-            }
+            choix = getChoix(scanner, choix, valide);
 
             switch (choix) {
                 case 1:
@@ -255,7 +220,7 @@ class Menu {
                     try {
                         colonie.verifierPreferencesCompletes();
                         colonie.assignerObjets();
-                        System.out.println(colonie.toString());
+                        System.out.println(colonie);
                     } catch (Exception e) {
                         System.err.println("Erreur : " + e.getMessage() + " Réessayer.");
                         }
@@ -263,7 +228,6 @@ class Menu {
                     break;
                 case 2:
                     System.out.print("\nEntrer le chemin du fichier vers lequel enregistrer la solution : ");
-                    valide = false;
                     while (!valide) { // Tant que l'utilisateur ne rentre pas un entier, on boucle
                         String cheminFichierEcriture = scanner.next();
                         try {
@@ -286,5 +250,27 @@ class Menu {
                     System.err.println("\nErreur : veuillez entrer un entier entre 1 et 3");
             }
         }
+    }
+
+    /**
+     * Choix dans un menu à 3 options.
+     * @param scanner le scanner ouvert lors du choix.
+     * @param choix l'entier choisi par l'utilisateur.
+     * @param valide le boolean valant false tant que l'entrée n'est pas conforme.
+     * @return choix
+     */
+    private static int getChoix(Scanner scanner, int choix, boolean valide) {
+        while (!valide) { // Tant que l'utilisateur ne rentre pas un entier, on boucle
+            try {
+                choix = Integer.parseInt(scanner.nextLine().trim()); // Déclenche une NumberFormatException si ce n'est pas un int
+                if (choix != 1 && choix != 2 && choix != 3) {
+                    throw new InputMismatchException();
+                }
+                valide = true; // Si pas d'exception, sortie de la boucle
+            } catch (NumberFormatException | InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
+                System.err.println("Erreur : veuillez entrer un entier entre 1 et 3");
+            }
+        }
+        return choix;
     }
 }
