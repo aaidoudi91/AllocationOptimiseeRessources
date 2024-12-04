@@ -6,7 +6,6 @@ import java.io.*;
 import app.Menu;
 
 class MenuTest {
-
     private final PrintStream originalOut = System.out;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 

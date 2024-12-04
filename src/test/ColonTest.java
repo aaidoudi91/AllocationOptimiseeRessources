@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * Classe de tests pour la classe Colon.
  */
 class ColonTest {
-
     private Colon colon;
 
     @BeforeEach

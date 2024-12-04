@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.*;
 
 class ColonieTest {
-
     private Colonie colonie;
 
     @BeforeEach
