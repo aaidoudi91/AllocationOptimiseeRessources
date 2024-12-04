@@ -1,13 +1,19 @@
 import java.util.ArrayList;
-import java.util.Objects;
 
-// Classe Colon : représente un colon dans la colonie avec ses préférences, relations et l'objet qui lui est assigné
+/**
+ * Classe Colon : représente un colon dans la colonie avec ses préférences,
+ * ses relations avec d'autres colons et l'objet assigné.
+ */
 public class Colon {
-    private String nom;
-    private ArrayList<String> preferences; // Liste triée des préférences d'objets du colon
-    private ArrayList<Colon> relations; // Liste des autres colons avec qui ce colon a des relations négatives
+    private final String nom;
+    private final ArrayList<String> preferences; // Liste triée des préférences d'objets du colon
+    private final ArrayList<Colon> relations; // Liste des autres colons avec qui ce colon a des relations négatives
     private String objetAssigne; // Objet actuellement assigné au colon
 
+    /**
+     * Constructeur de la classe Colon.
+     * @param nom du colon
+     */
     public Colon(String nom) {
         this.nom = nom;
         this.preferences = new ArrayList<>();
@@ -15,12 +21,18 @@ public class Colon {
         this.objetAssigne = null;
     }
 
-    // Ajoute un objet à la liste des préférences du colon
+    /**
+     * Ajoute un objet à la liste des préférences du colon.
+     * @param objet à ajouter aux préférences
+     */
     public void ajouterPreference(String objet) {
         preferences.add(objet);
     }
-    // Ajoute un autre colon à la liste des relations du colon
-    public void ajouterRelation(Colon autreColon) {
+
+    /**
+     * Ajoute un autre colon à la liste des relations du colon.
+     * @param autreColon avec qui établir une relation
+     */    public void ajouterRelation(Colon autreColon) {
         relations.add(autreColon);
     }
 
@@ -35,21 +47,32 @@ public class Colon {
         return objetAssigne;
     }
 
-    // Définit l'objet assigné au colon
     public void setObjetAssigne(String objet) {
         this.objetAssigne = objet;
     }
-    public void supprimerPreferences() {preferences.clear();}
+    public void supprimerPreferences() {
+        preferences.clear();
+    }
 
+    /**
+     * Représente le colon sous forme de chaîne de caractères.
+     * @return une chaîne contenant le nom, les préférences,
+     *       les relations du colon et l'objet assigné.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Colon: ").append(nom)
-                .append(", Préférences: ").append(preferences)
-                .append(", Objet assigné: ").append(objetAssigne)
-                .append(", Relations: ");
-        for (Colon relation : relations) {
-            sb.append(relation.getNom()).append(", ");
+                .append(", Préférences: ").append(preferences);
+        if (!relations.isEmpty()){
+            sb.append(", Relations: [");
+            for (Colon relation : relations) {
+                sb.append(relation.getNom()).append(", ");
+            }
+            sb.delete(sb.length()-2, sb.length());
+            sb.append("], Objet assigné: ").append(objetAssigne);
+        } else {
+            sb.append(", Pas de relation, Objet assigné: ").append(objetAssigne);
         }
         return sb.toString();
     }

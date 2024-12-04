@@ -3,8 +3,17 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-// Classe Interface : affiche et lis les données des colonies et colons dans le terminal
+/**
+ * La classe Menu gère l'interaction avec l'utilisateur dans le terminal.
+ * Elle permet de lancer l'application en fonction des arguments donnés, de gérer les colonies,
+ * les colons et leurs préférences, ainsi que de charger ou de sauvegarder des fichiers.
+ */
 class Menu {
+    /**
+     * Lance le programme en fonction des arguments fournis.
+     * @param args Les arguments de la ligne de commande. Si aucun argument n'est donné, la colonie est définie
+     *             manuellement, sinon elle est chargée depuis un fichier.
+     */
     public static void lancer(String[] args) {
         if (args.length == 0) { // Si l'utilisateur ne donne pas d'argument, définition de la colonie par ligne de cmd
             sansFichier();
@@ -16,10 +25,12 @@ class Menu {
             System.err.println("Trop d'arguments : uniquement le chemin du fichier est demandé");
             System.exit(1);
         }
-
-
     }
 
+    /**
+     * Initialisation de la colonie sans fichier. Cette méthode permet à l'utilisateur de définir le nombre de colons
+     * et leurs ressources, puis d'ajouter des relations ou des préférences via le terminal.
+     */
     private static void sansFichier(){
         Colonie colonie = new Colonie();
         Scanner scanner = new Scanner(System.in);
@@ -30,14 +41,13 @@ class Menu {
         System.out.print("Entrez le nombre de colons (entre 1 et 26) : ");
         while (!valide) { // Tant que l'utilisateur ne rentre pas un entier, on boucle
             try {
-                nombreColons = scanner.nextInt();
-                if (nombreColons < 1 || nombreColons > 26) {
+                nombreColons =  Integer.parseInt(scanner.nextLine().trim()); // Déclenche une NumberFormatException si ce n'est pas un int
+                if ((nombreColons < 1) || (nombreColons > 26)){
                     throw new InputMismatchException();
                 }
                 valide = true; // Si pas d'exception, sortie de la boucle
-            } catch (InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
-                System.err.println("Erreur : veuillez entrer un entier entre 1 et 26");
-                scanner.nextLine(); // Vide le tampon d'entrée
+            } catch (NumberFormatException | InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
+                System.err.println("Erreur : veuillez entrer un entier entre 1 et 26.");
             }
         }
 
@@ -58,14 +68,13 @@ class Menu {
             valide = false;
             while (!valide) { // Tant que l'utilisateur ne rentre pas un entier, on boucle
                 try {
-                    choix = scanner.nextInt();
+                    choix = Integer.parseInt(scanner.nextLine().trim()); // Déclenche une NumberFormatException si ce n'est pas un int
                     if (choix != 1 && choix != 2 && choix != 3) {
                         throw new InputMismatchException();
                     }
                     valide = true; // Si pas d'exception, sortie de la boucle
-                } catch (InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
+                } catch (NumberFormatException | InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
                     System.err.println("Erreur : veuillez entrer un entier entre 1 et 3");
-                    scanner.nextLine(); // Vide le tampon d'entrée
                 }
             }
 
@@ -73,16 +82,23 @@ class Menu {
                 case 1:
                     System.out.print("\nEntrez le nom des deux colons (format 'X Y'): ");
                     valide = false;
+
                     while (!valide) {
-                        String nom1 = scanner.next();
-                        String nom2 = scanner.next();
+                        String ligne = scanner.nextLine();
+                        String[] noms = ligne.split(" "); // Diviser la ligne en mots par les espaces
                         try {
+                            if (noms.length != 2) { // Vérifier qu'il y a exactement deux noms
+                                throw new IllegalArgumentException("Vous devez entrer exactement deux noms séparés " +
+                                        "par un unique espace.");
+                            }
+                            // Ajouter la relation entre les colons
+                            String nom1 = noms[0];
+                            String nom2 = noms[1];
                             colonie.ajouterRelation(nom1, nom2);
                             valide = true; // Si pas d'exception, sortie de la boucle
                             System.out.println("--> La relation des colons a été ajoutée.\n");
                         } catch (Exception e) {
                             System.err.println("Erreur : " + e.getMessage() + " Réessayer.");
-                            scanner.nextLine(); // Vide le tampon d'entrée
                         }
                     }
                     break;
@@ -91,21 +107,33 @@ class Menu {
                     ArrayList<String> preferences = new ArrayList<>();
                     valide = false;
                     while (!valide) {
-                        String nomColon = scanner.next();
-                        // Lire les n préférences de l'utilisateur
-                        for (int i = 0; i < nombreColons; i++) {
-                            preferences.add(scanner.next());
-                        }
+                        String ligne = scanner.nextLine();
+                        String[] elements = ligne.split(" "); // Diviser la ligne en mots par les espaces
                         try {
+                            // Vérifier que l'entrée contient au moins un nom + nombreColons préférences
+                            if (elements.length != nombreColons + 1) {
+                                throw new IllegalArgumentException("Le format est incorrect. Entrez un nom suivi de "
+                                        + nombreColons + " préférences, séparés d'uniques espaces");
+                            }
+                            String nomColon = elements[0];
+
+                            // Extraire les préférences
+                            preferences.clear();
+                            for (int i = 1; i <= nombreColons; i++) {
+                                preferences.add(elements[i]);
+                            }
+
+                            // Tenter d'ajouter les préférences
                             colonie.ajouterPreferences(nomColon, preferences);
                             valide = true; // Si pas d'exception, sortie de la boucle
-                            System.out.println("--> Les préférences du colons ont été ajoutées.\n");
+                            System.out.println("--> Les préférences du colon ont été ajoutées.\n");
                         } catch (IllegalArgumentException e) {
                             System.err.println("Erreur : " + e.getMessage());
-                            preferences.clear(); // Vide la liste
-                            scanner.nextLine(); // Vide le tampon d'entrée
+                        } catch (Exception e) {
+                            System.err.println("Erreur inattendue : " + e.getMessage());
                         }
                     }
+
                     break;
 
                 case 3:
@@ -132,14 +160,13 @@ class Menu {
             valide = false;
             while (!valide) { // Tant que l'utilisateur ne rentre pas un entier, on boucle
                 try {
-                    choix = scanner.nextInt();
+                    choix = Integer.parseInt(scanner.nextLine().trim()); // Déclenche une NumberFormatException si ce n'est pas un int
                     if (choix != 1 && choix != 2 && choix != 3) {
                         throw new InputMismatchException();
                     }
                     valide = true; // Si pas d'exception, sortie de la boucle
-                } catch (InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
+                } catch (NumberFormatException | InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
                     System.err.println("Erreur : veuillez entrer un entier entre 1 et 3");
-                    scanner.nextLine(); // Vide le tampon d'entrée
                 }
             }
 
@@ -148,15 +175,21 @@ class Menu {
                     System.out.print("\nEntrez le nom des deux colons (format 'X Y'): ");
                     valide = false;
                     while (!valide) {
-                        String nom1 = scanner.next();
-                        String nom2 = scanner.next();
+                        String ligne = scanner.nextLine();
+                        String[] noms = ligne.split(" "); // Diviser la ligne en mots par les espaces
                         try {
+                            if (noms.length != 2) { // Vérifier qu'il y a exactement deux noms
+                                throw new IllegalArgumentException("Vous devez entrer exactement deux noms séparés " +
+                                        "par un unique espace.");
+                            }
+                            // Ajouter la relation entre les colons
+                            String nom1 = noms[0];
+                            String nom2 = noms[1];
                             colonie.echangerRessources(nom1, nom2);
                             valide = true; // Si pas d'exception, sortie de la boucle
                             System.out.println("--> L'échange a été éffectué.\n");
                         } catch (Exception e) {
                             System.err.println("Erreur : " + e.getMessage() + " Réessayer.");
-                            scanner.nextLine(); // Vide le tampon d'entrée
                         }
                     }
                     break;
@@ -175,6 +208,11 @@ class Menu {
         scanner.close();
     }
 
+    /**
+     * Charge la colonie depuis un fichier spécifié par le chemin fourni. Cette méthode gère également les interactions
+     * avec l'utilisateur pour la gestion des colons, relations et préférences.
+     * @param cheminFichier Le chemin du fichier contenant les données de la colonie.
+     */
     private static void avecFichier(String cheminFichier) {
         Colonie colonie = new Colonie();
         try {
@@ -249,5 +287,4 @@ class Menu {
             }
         }
     }
-
 }

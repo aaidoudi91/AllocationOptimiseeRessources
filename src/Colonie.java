@@ -1,17 +1,26 @@
 import java.io.*;
 import java.util.*;
 
-// Classe Colonie : gère l'ensemble des colons et leurs relations dans la colonie
+/**
+ * Classe Colonie : gère l'ensemble des colons et leurs relations dans la colonie.
+ */
 public class Colonie {
-    private Map<String, Colon> colons; // Dictionnaire associant les noms de colons à leurs objets Colon respectifs
+    private final Map<String, Colon> colons; // Dictionnaire associant les noms de colons à leurs objets Colon respectifs
     private Set<String> ressources; // Ensemble des ressources disponibles dans la colonie
 
+    /**
+     * Constructeur de la classe Colonie, initialise les collections pour les colons et les ressources.
+     */
     public Colonie() {
         this.colons = new HashMap<>();
         this.ressources = new HashSet<>();
     }
 
-    // Ajoute un colon dans la colonie
+    /**
+     * Ajoute un colon à la colonie.
+     * @param nom du colon à ajouter.
+     * @throws IllegalArgumentException Si le nom du colon est nul ou vide, ou si le colon existe déjà.
+     */
     public void ajouterColon(String nom) {
         if (nom == null || nom.isEmpty()) {
             throw new IllegalArgumentException("Le nom du colon ne peut pas être nul ou vide.");
@@ -23,7 +32,12 @@ public class Colonie {
         }
     }
 
-    // Ajoute une relation entre deux colons
+    /**
+     * Ajoute une relation entre deux colons.
+     * @param nom1 du premier colon.
+     * @param nom2 du second colon.
+     * @throws IllegalArgumentException Si les colons n'existent pas, ou si un colon tente de se mettre en relation avec lui-même.
+     */
     public void ajouterRelation(String nom1, String nom2) {
         if (nom1.equals(nom2)) {
             throw new IllegalArgumentException("Un colon ne peut pas être en inimité avec lui-même.");
@@ -37,15 +51,25 @@ public class Colonie {
         colon2.ajouterRelation(colon1); // ... du second colon vers le premier
     }
 
-    // Ajoute les préférences d'un colon (modifiée lors de la Partie B pour recevoir des Strings)
+    /**
+     * Ajoute des préférences à un colon.
+     * @param nom du colon.
+     * @param preferences la liste des préférences du colon.
+     * @throws IllegalArgumentException Si le colon n'existe pas, ou si les préférences ne correspondent pas aux ressources.
+     */
     public void ajouterPreferences(String nom, List<String> preferences) {
         Colon colon = colons.get(nom); // Récupère le colon par son nom
         if (colon == null) { // Vérifie que le colon existe
             throw new IllegalArgumentException("Le colon n'existe pas");
         }
-        if (!(ressources.containsAll(preferences) && preferences.containsAll(ressources))) {
-            // Vérifie que les préférences données soient identiques et au même nombre qu'à l'origine
-            throw new IllegalArgumentException("Les préférences indiqués ne sont pas celles spécifiées à l'origine");
+        Set<String> preferencesUnqiues = new HashSet<>(preferences); // Vérification que les préférences sont bien toutes différentes
+        if (preferencesUnqiues.size() != ressources.size()) {
+            // Vérifie que les préférences données ne se répètent pas
+            throw new IllegalArgumentException("Les préférences ne peuvent pas se répéter");
+        }
+        if (!ressources.containsAll(preferencesUnqiues)){
+            // Vérifie que les préférences données soient identiques qu'à l'origine
+            throw new IllegalArgumentException("Les préférences ne peuvent pas se répéter");
         }
         if (!colon.getPreferences().isEmpty()) {
             colon.supprimerPreferences(); // Si on redéfinit des préférences, on supprime celle deja existantes
@@ -54,13 +78,18 @@ public class Colonie {
         preferences.forEach(colon::ajouterPreference); // Ajoute chaque préférence à la liste des préférences du colon
     }
 
-    // Vérifie si chaque colon a une liste de préférences complète
+    /**
+     * Vérifie si tous les colons ont une liste de préférences complète.
+     * @return true si tous les colons ont leurs préférences, false sinon.
+     */
     public boolean verifierPreferencesCompletes() {
         boolean complet = true;
         StringBuilder sb = new StringBuilder();
         for (Colon colon : colons.values()) {
             if (colon.getPreferences().isEmpty()) {
-                sb.append("Préférences manquantes pour le colon " + colon.getNom() + ".\n");
+                sb.append("Préférences manquantes pour le colon ");
+                sb.append(colon.getNom());
+                sb.append(".\n");
                 complet = false;
             }
         }
@@ -68,7 +97,10 @@ public class Colonie {
         return complet;
     }
 
-    // Affecte chaque objet aux colons selon leurs préférences (selon la méthode spécifiée pour la partie 1)
+    /**
+     * Assigne des objets aux colons selon leurs préférences.
+     * Algorithme de la partie 1 du projet.
+     */
     public void assignerObjets() {
         Set<String> objetsDisponibles = ressources; // Ensemble des objets encore disponibles pour les colons
 
@@ -83,7 +115,10 @@ public class Colonie {
         }
     }
 
-    // Calcule le nombre de colons jaloux en fonction des objets assignés aux colons et à leurs relations
+    /**
+     * Calcule le nombre de colons jaloux en fonction des objets assignés et des relations.
+     * @return Le nombre de colons jaloux.
+     */
     public int calculerColonsJaloux() {
         int colonsJaloux = 0; // Compteur de colons jaloux
         for (Colon colon : colons.values()) { // Parcourt tous les colons de la colonie
@@ -98,7 +133,12 @@ public class Colonie {
         return colonsJaloux; // Retourne le nombre total de colons jaloux
     }
 
-    // Échange les objets assignés entre deux colons
+    /**
+     * Échange les objets assignés entre deux colons.
+     * @param nom1 du premier colon.
+     * @param nom2 du second colon.
+     * @throws IllegalArgumentException Si l'un des colons n'existe pas.
+     */
     public void echangerRessources(String nom1, String nom2) {
         Colon colon1 = colons.get(nom1); // Récupère le premier colon par son nom
         Colon colon2 = colons.get(nom2);
@@ -111,7 +151,11 @@ public class Colonie {
 
     }
 
-    // Méthode pour charger les données d'une colonie depuis un fichier texte
+    /**
+     * Charge les données d'une colonie depuis un fichier texte.
+     * @param cheminFichier Le chemin du fichier à charger.
+     * @throws IOException Si une erreur d'entrée/sortie se produit lors de la lecture du fichier.
+     */
     public void chargerFichier(String cheminFichier) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(cheminFichier));
         String ligne;
@@ -177,6 +221,11 @@ public class Colonie {
         reader.close();
     }
 
+    /**
+     * Sauvegarde l'état de la colonie dans un fichier texte.
+     * @param cheminFichier Le chemin du fichier où sauvegarder l'état de la colonie.
+     * @throws IOException Si une erreur d'entrée/sortie se produit lors de la sauvegarde dans le fichier.
+     */
     public void enregistreFichier(String cheminFichier) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(cheminFichier));
         for (Colon colon : colons.values()) { // Écrit pour chaque colon de la colonie son nom et sa ressource donnée
@@ -188,6 +237,11 @@ public class Colonie {
         writer.close();
     }
 
+    /**
+     * Renvoie une représentation sous forme de chaîne de caractères de la colonie,
+     * y compris tous les colons et leurs informations.
+     * @return Une chaîne de caractères représentant l'état de la colonie.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -198,6 +252,11 @@ public class Colonie {
         return sb.toString();
     }
 
+    /**
+     * Initialise les ressources en fonction du nombre de colons.
+     * Chaque ressource est identifiée par un entier sous forme de chaîne (1, 2, ..., nombreColons).
+     * @param nombreColons qui détermine également le nombre de ressources.
+     */
     public void setRessources(int nombreColons) { // Dans le cas de l'entrée par le shell, on crée les ressources
         Set<String> ressources = new HashSet<>();
         for (int i = 1; i <= nombreColons; i++) {
@@ -206,6 +265,11 @@ public class Colonie {
         this.ressources = ressources;
     }
 
+    /**
+     * Crée les colons en fonction du nombre donné.
+     * Les noms des colons sont générés par des lettres majuscules (A, B, C, ...).
+     * @param nombreColons Le nombre de colons à créer.
+     */
     public void setColons(int nombreColons) { //  Dans le cas de l'entrée par le shell, on crée les colons
         for (int i = 0; i < nombreColons; i++) {
             String nom = Character.toString((char) ('A' + i));
