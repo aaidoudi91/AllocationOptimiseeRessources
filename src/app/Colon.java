@@ -1,3 +1,5 @@
+package app;
+
 import java.util.ArrayList;
 
 /**
@@ -26,13 +28,26 @@ public class Colon {
      * @param objet à ajouter aux préférences
      */
     public void ajouterPreference(String objet) {
+        if (objet == null) {
+            throw new NullPointerException("La préférence ne peut pas être nul");
+        }
+        if (preferences.contains(objet)){
+            throw new NullPointerException("La préférence existe deja.");
+        }
         preferences.add(objet);
     }
 
     /**
      * Ajoute un autre colon à la liste des relations du colon.
      * @param autreColon avec qui établir une relation
-     */    public void ajouterRelation(Colon autreColon) {
+     */
+    public void ajouterRelation(Colon autreColon) {
+        if (autreColon.getNom().equals(nom)){
+            throw new IllegalArgumentException("Un colon ne peut pas être en inimité avec lui-même");
+        }
+        if (relations.contains(autreColon)){
+            throw new IllegalArgumentException("La relation existe deja.");
+        }
         relations.add(autreColon);
     }
 
@@ -48,6 +63,9 @@ public class Colon {
     }
 
     public void setObjetAssigne(String objet) {
+        if (objet == null) {
+            throw new NullPointerException("L'objet assigné ne peut pas être nul");
+        }
         this.objetAssigne = objet;
     }
     public void supprimerPreferences() {

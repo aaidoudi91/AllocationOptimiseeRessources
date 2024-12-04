@@ -1,15 +1,14 @@
+package app;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * La classe Menu gère l'interaction avec l'utilisateur dans le terminal.
  * Elle permet de lancer l'application en fonction des arguments donnés, de gérer les colonies,
  * les colons et leurs préférences, ainsi que de charger ou de sauvegarder des fichiers.
  */
-class Menu {
+public class Menu {
     /**
      * Lance le programme en fonction des arguments fournis.
      * @param args Les arguments de la ligne de commande. Si aucun argument n'est donné, la colonie est définie

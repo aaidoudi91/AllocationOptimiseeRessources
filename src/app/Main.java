@@ -1,3 +1,5 @@
+package app;
+
 /**
  * La classe Main contient la méthode principale du programme.
  * Elle est responsable du lancement de l'application en appelant la méthode
