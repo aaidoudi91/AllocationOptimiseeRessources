@@ -218,7 +218,8 @@ public class Menu {
                     System.out.print("\n");
                     try {
                         colonie.verifierPreferencesCompletes();
-                        colonie.assignerObjets();
+                        colonie.assignerObjets2();
+                        System.out.println("Nombre de colons jaloux : " + colonie.calculerColonsJaloux());
                         System.out.println(colonie);
                     } catch (Exception e) {
                         System.err.println("Erreur : " + e.getMessage() + " Réessayer.");

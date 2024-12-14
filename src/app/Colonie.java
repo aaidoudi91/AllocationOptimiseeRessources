@@ -278,4 +278,86 @@ public class Colonie {
             ajouterColon(nom);
         }
     }
+
+    /**
+     * Assigne des objets aux colons selon leurs préférences.
+     * Algorithme de la partie 2 du projet, expliqué en details dans le README.
+     */
+    public void assignerObjets2() {
+        // Liste des colons et des objets disponibles
+        List<Colon> colonList = new ArrayList<>(colons.values());
+        List<String> objetsDisponibles = new ArrayList<>(ressources);
+
+        // Créer une assignation initiale aléatoire
+        Map<Colon, String> meilleureAssignation = new HashMap<>();
+        for (Colon colon : colonList) {
+            String objet = objetsDisponibles.remove(0);
+            meilleureAssignation.put(colon, objet);
+        }
+
+        // Calculer la jalousie pour la solution initiale
+        int meilleureJalousie = calculerJalousie(meilleureAssignation);
+
+        // Algorithme glouton avec amélioration locale
+        boolean amelioration = true;
+        while (amelioration) {
+            amelioration = false;
+
+            // Explorer les échanges entre tous les couples de colons
+            for (int i = 0; i < colonList.size(); i++) {
+                for (int j = i + 1; j < colonList.size(); j++) {
+                    Colon colon1 = colonList.get(i);
+                    Colon colon2 = colonList.get(j);
+
+                    // Échanger les objets assignés entre colon1 et colon2
+                    Map<Colon, String> nouvelleAssignation = new HashMap<>(meilleureAssignation);
+                    String temp = nouvelleAssignation.get(colon1);
+                    nouvelleAssignation.put(colon1, nouvelleAssignation.get(colon2));
+                    nouvelleAssignation.put(colon2, temp);
+
+                    // Calculer la jalousie après l'échange
+                    int nouvelleJalousie = calculerJalousie(nouvelleAssignation);
+
+                    // Si la nouvelle assignation est meilleure (moins de jalousie), on l'adopte
+                    if (nouvelleJalousie < meilleureJalousie) {
+                        meilleureAssignation = nouvelleAssignation;
+                        meilleureJalousie = nouvelleJalousie;
+                        amelioration = true; // Il y a eu une amélioration, donc on continue
+                    }
+                }
+            }
+        }
+
+        // Appliquer la meilleure assignation trouvée
+        for (Map.Entry<Colon, String> entry : meilleureAssignation.entrySet()) {
+            entry.getKey().setObjetAssigne(entry.getValue());
+        }
+    }
+
+
+    /**
+     * Calcule le nombre de colons jaloux pour une assignation donnée.
+     * @param assignation Une correspondance entre les colons et leurs objets assignés.
+     * @return Le nombre total de colons jaloux.
+     */
+    private int calculerJalousie(Map<Colon, String> assignation) {
+        int jalousie = 0;
+
+        for (Map.Entry<Colon, String> entry : assignation.entrySet()) {
+            Colon colon = entry.getKey();
+            String objetAssigne = entry.getValue();
+
+            for (Colon relation : colon.getRelations()) {
+                String objetRelation = assignation.get(relation);
+
+                if (colon.getPreferences().indexOf(objetRelation) < colon.getPreferences().indexOf(objetAssigne)) {
+                    jalousie++;
+                    break; // Un colon jaloux n'est compté qu'une fois
+                }
+            }
+        }
+        System.out.println();
+        return jalousie;
+    }
+
 }
