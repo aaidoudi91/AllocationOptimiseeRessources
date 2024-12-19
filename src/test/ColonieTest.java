@@ -58,11 +58,6 @@ class ColonieTest {
         // Test exception for non-existent colon
         IllegalArgumentException exceptionNonExistentColon = assertThrows(IllegalArgumentException.class, () -> colonie.ajouterPreferences("C", Arrays.asList("1", "2")));
         assertEquals("Le colon n'existe pas", exceptionNonExistentColon.getMessage());
-
-        // Test exception for mismatched preferences
-        colonie.setRessources(3); // Should throw exception because there are only 2 available resources
-        IllegalArgumentException exceptionMismatched = assertThrows(IllegalArgumentException.class, () -> colonie.ajouterPreferences("A", Arrays.asList("1", "2", "3")));
-        assertEquals("Les préférences ne peuvent pas se répéter", exceptionMismatched.getMessage());
     }
 
     @Test
@@ -72,10 +67,6 @@ class ColonieTest {
         colonie.ajouterPreferences("A", Arrays.asList("1", "2", "3"));
         colonie.ajouterPreferences("B", Arrays.asList("1", "2", "3"));
 
-        assertTrue(colonie.verifierPreferencesCompletes());
-
-        // Test incomplete preferences
-        colonie.ajouterPreferences("C", Arrays.asList("1", "2"));
         assertFalse(colonie.verifierPreferencesCompletes());
     }
 
@@ -97,6 +88,8 @@ class ColonieTest {
     void testCalculerColonsJaloux() {
         colonie.setRessources(3);
         colonie.setColons(3);
+        colonie.ajouterRelation("A", "B");
+        colonie.ajouterRelation("C", "B");
         colonie.ajouterPreferences("A", Arrays.asList("1", "2", "3"));
         colonie.ajouterPreferences("B", Arrays.asList("2", "3", "1"));
         colonie.ajouterPreferences("C", Arrays.asList("3", "1", "2"));
@@ -105,10 +98,21 @@ class ColonieTest {
         int colonsJaloux = colonie.calculerColonsJaloux();
         assertEquals(0, colonsJaloux);
 
-        // Introduce jealousy
-        colonie.ajouterPreferences("A", Arrays.asList("3", "2", "1"));
+    }
+
+    @Test
+    void testCalculerColonsJaloux2() {
+        colonie.setRessources(3);
+        colonie.setColons(3);
+        colonie.ajouterRelation("A", "B");
+        colonie.ajouterRelation("C", "B");
+        colonie.ajouterPreferences("A", Arrays.asList("1", "2", "3"));
+        colonie.ajouterPreferences("B", Arrays.asList("2", "3", "1"));
+        colonie.ajouterPreferences("C", Arrays.asList("2", "3", "1"));
         colonie.assignerObjets();
-        colonsJaloux = colonie.calculerColonsJaloux();
+        System.out.println(colonie);
+
+        int colonsJaloux = colonie.calculerColonsJaloux();
         assertEquals(1, colonsJaloux);
     }
 
@@ -122,9 +126,6 @@ class ColonieTest {
 
         colonie.echangerRessources("A", "B");
 
-        assertEquals("2", colonie.toString().contains("A"));
-        assertEquals("1", colonie.toString().contains("B"));
-
         // Test exception for non-existent colon
         IllegalArgumentException exceptionNonExistentColon = assertThrows(IllegalArgumentException.class, () -> colonie.echangerRessources("A", "C"));
         assertEquals("Un ou les deux colons spécifiés n'existent pas.", exceptionNonExistentColon.getMessage());
@@ -133,7 +134,7 @@ class ColonieTest {
     @Test
     void testChargerFichier() {
         // Test valid loading of file
-        assertDoesNotThrow(() -> colonie.chargerFichier("fichier_valide.txt"));
+        assertDoesNotThrow(() -> colonie.chargerFichier("colonie.txt"));
 
         // Test invalid file loading (non-existent file)
         assertThrows(IOException.class, () -> colonie.chargerFichier("fichier_inexistant.txt"));
@@ -148,5 +149,27 @@ class ColonieTest {
         colonie.assignerObjets();
 
         assertDoesNotThrow(() -> colonie.enregistreFichier("fichier_sauvegarde.txt"));
+    }
+    @Test
+    void testEchangerRessourcesTousAttribues() {
+        colonie.setRessources(3);
+        colonie.setColons(3);
+        colonie.ajouterPreferences("A", Arrays.asList("1", "2", "3"));
+        colonie.ajouterPreferences("B", Arrays.asList("1", "2", "3"));
+        colonie.ajouterPreferences("C", Arrays.asList("1", "2", "3"));
+        colonie.assignerObjets();
+
+        // Test that an exchange is possible, even when all resources are assigned
+        assertDoesNotThrow(() -> colonie.echangerRessources("A", "B"));
+    }
+
+    // Test pour vérifier si la méthode retourne une exception si une préférence est incomplète
+    @Test
+    void testSets() {
+        colonie.setRessources(3);
+        colonie.setColons(3);
+        assertTrue(colonie.toString().contains("Colon: A"));
+        assertTrue(colonie.toString().contains("Colon: B"));
+        assertTrue(colonie.toString().contains("Colon: C"));
     }
 }

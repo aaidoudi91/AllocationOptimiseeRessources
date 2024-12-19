@@ -31,7 +31,7 @@ public class Menu {
      * Initialisation de la colonie sans fichier. Cette méthode permet à l'utilisateur de définir le nombre de colons
      * et leurs ressources, puis d'ajouter des relations ou des préférences via le terminal.
      */
-    private static void sansFichier(){
+    public static void sansFichier(){
         Colonie colonie = new Colonie();
         Scanner scanner = new Scanner(System.in);
 
@@ -124,7 +124,7 @@ public class Menu {
 
                 case 3:
                     if (colonie.verifierPreferencesCompletes()) { // Si les préférences sont completes, on affiche le résultat
-                        colonie.assignerObjets();
+                        colonie.assignerObjets3();
                         System.out.println(colonie);
                         fin = true;
                     }
@@ -201,6 +201,7 @@ public class Menu {
             System.exit(1);
         }
 
+        boolean assignation = false; // Verifier si l'assignation est faite avant d'enregistrer un résultat
         Scanner scanner = new Scanner(System.in);
         boolean fin = false;
         while (!fin) {
@@ -218,36 +219,41 @@ public class Menu {
                     System.out.print("\n");
                     try {
                         colonie.verifierPreferencesCompletes();
-                        colonie.assignerObjets2();
+                        colonie.assignerObjets3();
                         System.out.println("Nombre de colons jaloux : " + colonie.calculerColonsJaloux());
                         System.out.println(colonie);
+                        assignation = true;
                     } catch (Exception e) {
                         System.err.println("Erreur : " + e.getMessage() + " Réessayer.");
-                        }
-
+                    }
                     break;
                 case 2:
                     System.out.print("\nEntrer le chemin du fichier vers lequel enregistrer la solution : ");
                     while (!valide) { // Tant que l'utilisateur ne rentre pas un entier, on boucle
-                        String cheminFichierEcriture = scanner.next();
+                        String cheminFichierEcriture = scanner.nextLine();
                         try {
+                            if (!assignation) {
+                                colonie.verifierPreferencesCompletes();
+                                colonie.assignerObjets3();
+                                assignation = true;
+                            }
                             colonie.enregistreFichier(cheminFichierEcriture);
                             valide = true; // Si pas d'exception, sortie de la boucle
                             System.out.println("--> Fichier enregistré.\n");
                         } catch (IOException e) {
                             System.err.println("Erreur liée au fichier : " + e.getMessage());
-                        } catch (NullPointerException e){
+                        } catch (Exception e) {
                             System.err.println("Erreur : " + e.getMessage());
 
                         }
                     }
                     break;
-
                 case 3:
                     System.exit(0);
                     break;
                 default:
                     System.err.println("\nErreur : veuillez entrer un entier entre 1 et 3");
+
             }
         }
     }
@@ -259,7 +265,7 @@ public class Menu {
      * @param valide le boolean valant false tant que l'entrée n'est pas conforme.
      * @return choix
      */
-    private static int getChoix(Scanner scanner, int choix, boolean valide) {
+    static int getChoix(Scanner scanner, int choix, boolean valide) {
         while (!valide) { // Tant que l'utilisateur ne rentre pas un entier, on boucle
             try {
                 choix = Integer.parseInt(scanner.nextLine().trim()); // Déclenche une NumberFormatException si ce n'est pas un int

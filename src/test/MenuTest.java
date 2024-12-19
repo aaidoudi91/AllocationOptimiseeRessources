@@ -43,7 +43,7 @@ class MenuTest {
     // Test lorsqu'un fichier est passé en argument
     @Test
     void testLancerAvecFichier() {
-        String[] args = {"path/to/file.txt"}; // Chemin vers un fichier valide
+        String[] args = {"colonie.txt"}; // Chemin vers un fichier valide
         ByteArrayInputStream inContent = new ByteArrayInputStream("3\n".getBytes());
         System.setIn(inContent);
 
@@ -156,4 +156,5 @@ class MenuTest {
         String output = outContent.toString();
         assertTrue(output.contains("Fin du programme"));
     }
+
 }

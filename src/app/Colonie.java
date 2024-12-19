@@ -28,7 +28,7 @@ public class Colonie {
             throw new IllegalArgumentException("Le nom du colon ne peut pas être nul ou vide.");
         }
         else if (colons.containsKey(nom)) {
-            System.out.println("Le colon " + nom + " existe déjà.");
+            throw new IllegalArgumentException("Le colon " + nom + " existe déjà.");
         } else {
             colons.put(nom, new Colon(nom));  // Ajoute un nouveau colon s'il n'est pas déjà présent
         }
@@ -64,12 +64,12 @@ public class Colonie {
         if (colon == null) { // Vérifie que le colon existe
             throw new IllegalArgumentException("Le colon n'existe pas");
         }
-        Set<String> preferencesUnqiues = new HashSet<>(preferences); // Vérification que les préférences sont bien toutes différentes
-        if (preferencesUnqiues.size() != ressources.size()) {
+        Set<String> preferencesUniques = new HashSet<>(preferences); // Vérification que les préférences sont bien toutes différentes
+        if (preferencesUniques.size() != ressources.size()) {
             // Vérifie que les préférences données ne se répètent pas
             throw new IllegalArgumentException("Les préférences ne peuvent pas se répéter");
         }
-        if (!ressources.containsAll(preferencesUnqiues)){
+        if (!ressources.containsAll(preferencesUniques)){
             // Vérifie que les préférences données soient identiques qu'à l'origine
             throw new IllegalArgumentException("Les préférences ne peuvent pas se répéter");
         }
@@ -97,24 +97,6 @@ public class Colonie {
         }
         if (!complet) System.out.println(sb);
         return complet;
-    }
-
-    /**
-     * Assigne des objets aux colons selon leurs préférences.
-     * Algorithme de la partie 1 du projet.
-     */
-    public void assignerObjets() {
-        Set<String> objetsDisponibles = ressources; // Ensemble des objets encore disponibles pour les colons
-
-        for (Colon colon : colons.values()) { // Parcourt tous les colons de la colonie
-            for (String preference : colon.getPreferences()) { // Parcourt les préférences du colon
-                if (objetsDisponibles.contains(preference)) { // Si l'objet préféré est disponible
-                    colon.setObjetAssigne(preference); // Assigne cet objet au colon
-                    objetsDisponibles.remove(preference); // Retire l'objet de la liste des objets disponibles
-                    break; // Sort de la boucle dès qu'un objet est assigné
-                }
-            }
-        }
     }
 
     /**
@@ -273,6 +255,7 @@ public class Colonie {
      * @param nombreColons Le nombre de colons à créer.
      */
     public void setColons(int nombreColons) { //  Dans le cas de l'entrée par le shell, on crée les colons
+
         for (int i = 0; i < nombreColons; i++) {
             String nom = Character.toString((char) ('A' + i));
             ajouterColon(nom);
@@ -281,7 +264,25 @@ public class Colonie {
 
     /**
      * Assigne des objets aux colons selon leurs préférences.
-     * Algorithme de la partie 2 du projet, expliqué en details dans le README.
+     * Algorithme de la partie 1 du projet.
+     */
+    public void assignerObjets() {
+        Set<String> objetsDisponibles = ressources; // Ensemble des objets encore disponibles pour les colons
+
+        for (Colon colon : colons.values()) { // Parcourt tous les colons de la colonie
+            for (String preference : colon.getPreferences()) { // Parcourt les préférences du colon
+                if (objetsDisponibles.contains(preference)) { // Si l'objet préféré est disponible
+                    colon.setObjetAssigne(preference); // Assigne cet objet au colon
+                    objetsDisponibles.remove(preference); // Retire l'objet de la liste des objets disponibles
+                    break; // Sort de la boucle dès qu'un objet est assigné
+                }
+            }
+        }
+    }
+
+    /**
+     * Assigne des objets aux colons selon leurs préférences.
+     * Premier algorithme de la partie 2 du projet, expliqué en details dans le README.
      */
     public void assignerObjets2() {
         // Liste des colons et des objets disponibles
@@ -334,7 +335,6 @@ public class Colonie {
         }
     }
 
-
     /**
      * Calcule le nombre de colons jaloux pour une assignation donnée.
      * @param assignation Une correspondance entre les colons et leurs objets assignés.
@@ -356,8 +356,80 @@ public class Colonie {
                 }
             }
         }
-        System.out.println();
         return jalousie;
     }
 
+    /**
+     * Assigne des objets aux colons selon leurs préférences.
+     * Second algorithme de la partie 2 du projet, expliqué en details dans le README.
+     * Attention, la complexité de cet algorithme est O(n!), n le nombre de colons.
+     */
+    public void assignerObjets3() {
+        System.out.println("Cherche l'assignation optimale...");
+        // Liste des colons et des objets disponibles
+        List<Colon> colonList = new ArrayList<>(colons.values());
+        List<String> objetsDisponibles = new ArrayList<>(ressources);
+
+        // Initialiser les variables pour stocker la meilleure assignation
+        Map<Colon, String> meilleureAssignation = new HashMap<>();
+        int meilleureJalousie = Integer.MAX_VALUE;
+
+        // Générer toutes les permutations possibles des objets disponibles
+        List<List<String>> permutations = genererPermutations(objetsDisponibles);
+
+        // Parcourir chaque permutation pour calculer la jalousie
+        for (List<String> permutation : permutations) {
+            // Créer une assignation actuelle en utilisant la permutation
+            Map<Colon, String> assignationActuelle = new HashMap<>();
+            for (int i = 0; i < colonList.size(); i++) {
+                assignationActuelle.put(colonList.get(i), permutation.get(i));
+            }
+
+            // Calculer la jalousie pour cette assignation
+            int jalousieActuelle = calculerJalousie(assignationActuelle);
+
+            // Vérifier si cette assignation est meilleure que la meilleure trouvée jusqu'à présent
+            if (jalousieActuelle < meilleureJalousie) {
+                meilleureJalousie = jalousieActuelle; // Mettre à jour la jalousie minimale
+                meilleureAssignation = new HashMap<>(assignationActuelle); // Enregistrer la nouvelle meilleure assignation
+            }
+        }
+
+        // Appliquer la meilleure assignation trouvée à chaque colon
+        for (Map.Entry<Colon, String> entry : meilleureAssignation.entrySet()) {
+            entry.getKey().setObjetAssigne(entry.getValue());
+        }
+    }
+
+    /**
+     * Génère toutes les permutations possibles d'une liste donnée.
+     * @param liste La liste des éléments pour lesquels générer les permutations.
+     * @return Une liste contenant toutes les permutations possibles.
+     */
+    private List<List<String>> genererPermutations(List<String> liste) {
+        List<List<String>> result = new ArrayList<>();
+        permuter(result, new ArrayList<>(), liste);
+        return result;
+    }
+
+    /**
+     * Fonction récursive pour générer les permutations d'une liste.
+     * @param result La liste finale contenant toutes les permutations.
+     * @param temp Une liste temporaire pour construire les permutations actuelles.
+     * @param liste La liste initiale des éléments à permuter.
+     */
+    private void permuter(List<List<String>> result, List<String> temp, List<String> liste) {
+        // Condition de terminaison : si la permutation temporaire a la même taille que la liste de départ
+        if (temp.size() == liste.size()) {
+            result.add(new ArrayList<>(temp)); // Ajouter la permutation actuelle au résultat
+            return;
+        }
+        // Explorer chaque élément de la liste
+        for (int i = 0; i < liste.size(); i++) {
+            if (temp.contains(liste.get(i))) continue; // Éviter d'ajouter deux fois le même élément
+            temp.add(liste.get(i)); // Ajouter l'élément actuel à la permutation temporaire
+            permuter(result, temp, liste); // Appel récursif pour compléter la permutation
+            temp.remove(temp.size() - 1); // Retirer l'élément pour explorer d'autres possibilités
+        }
+    }
 }

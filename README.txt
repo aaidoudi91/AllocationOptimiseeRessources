@@ -9,16 +9,35 @@ I) Exécution du programme
     Colon & Colonie regroupent les fonctionnalités décrites dans la partie III) b. de ce document.
     Aussi, le programme comprend des tests unitaires dans le package test.
 
-    Ainsi, pour exécuter le programme il faut :
+    Ainsi, pour exécuter le programme, il faut :
         Si le projet n'est pas compilé :
-            a. Compiler les fichiers du package projet avec la commande 'javac app/*.java' depuis le repertoire du projet.
-            b. Exécuter le programme avec la commande 'java app.Main', en ajoutant ou non le chemin vers un fichier .txt à sa fin.
+            i. Compiler les fichiers du package projet avec la commande 'javac app/*.java' depuis le repertoire /app du projet.
+            ii. Exécuter le programme avec la commande 'java app.Main', en ajoutant ou non le chemin vers un fichier .txt à sa fin.
         Si le projet est dans une archive java :
-            a. Exécuter le programme avec la commande 'java -jar ...'
+            i. Exécuter le programme avec la commande 'java -jar ...'
 
 
-II) Algorithme de résolution automatique
-    //TO DO
+II) Algorithmes de résolution automatique :
+    i. Algorithme naïf de la partie 1 :
+        La méthode assignerObjets de la classe Colonie parcourt un à un chacun colon et assigne l'objet le plus préféré parmi ceux disponibles, en ignorant les relations.
+
+    ii. Algorithme rapide et approximatif
+        La méthode assignerObjets2 de la classe Colonie est une approche rapide efficace pour des grands problèmes, mais ne donnant la solution optimale.
+        L'algorithme commence par une assignation initiale aléatoire des objets aux colons, puis calcule la jalousie associée.
+        Ensuite, l’algorithme explore les échanges d'objets entre paires de colons pour réduire la jalousie totale.
+        Si un échange diminue la jalousie, il est adopté, et l'exploration continue jusqu'à ce qu'aucun échange n'améliore la situation.
+        Ce processus glouton avec améliorations locales garantit une meilleure répartition des ressources, même si elle n'est pas forcément optimale globalement.
+        Pour les 3 exemples de colonies données, on obtient un nombre de colons jaloux respectif de 1, 3, et 1 ; en un temps négligeable.
+
+    iii. Algorithme optimal
+        La méthode assignerObjets3 de la classe Colonie vise l’assignation des objets garantit une solution optimale en minimisant la jalousie entre les colons.
+        Elle repose sur une approche exhaustive, générant toutes les permutations possibles des objets disponibles et calculant la jalousie pour chaque assignation.
+        Grâce à cette méthode, nous identifions l'assignation qui minimise le nombre de colons jaloux.
+        Cependant, bien que cette approche soit optimale, elle est coûteuse en termes de complexité, avec une durée d'exécution proportionnelle à la factorielle du nombre de colons O(n!).
+        Elle est donc adaptée uniquement pour des instances de petite taille, où le nombre de colons et d'objets reste raisonnable.
+        Cette implémentation comprend également une gestion claire et efficace des permutations grâce à des méthodes récursives.
+        Si le nombre de colons ou d'objets augmente, il est recommandé d'utiliser une approche heuristique, comme l'algorithme glouton, pour obtenir une solution rapide mais approximative.
+        Pour les 3 exemples de colonies données, on obtient un nombre de colons jaloux respectif de 0, 1, et 0 ; en quelques longues secondes.
 
 
 III) Fonctionnalités
@@ -29,4 +48,4 @@ III) Fonctionnalités
         - Liées aux tests unitaires : placés dans le package test, ces derniers constituent un ensemble le plus complet possible pour chacune des classes du programme.
 
     b. Fonctionnalités manquantes ou présentant des problèmes
-        - (Bonus) Liées à JavaFX : pas d'interface graphique pour l'application, tout ce fait via le terminal et fichier texte.
+        - (Bonus) Liées à JavaFX : pas d'interface graphique pour l'application, tout se fait via le terminal et fichier texte.

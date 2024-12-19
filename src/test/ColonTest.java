@@ -147,4 +147,11 @@ class ColonTest {
         String expected = "Colon: Colon Sans Relation, Préférences: [], Pas de relation, Objet assigné: null";
         assertEquals(expected, colonSansRelation.toString());
     }
+    @Test
+    void testAjouterRelationAvecLuiMeme() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            colon.ajouterRelation(colon);  // Tentative d'ajout d'une relation avec lui-même
+        });
+        assertEquals("Un colon ne peut pas être en inimité avec lui-même", thrown.getMessage());
+    }
 }
