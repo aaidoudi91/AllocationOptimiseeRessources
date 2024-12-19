@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="ProgAvanceeProjet:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/ProgAvanceeProjet_jar</output-path>
+  <artifact type="jar" name="ADAMCZYK_AIDOUDI_Projet">
+    <output-path>$PROJECT_DIR$/out/artifacts/ADAMCZYK_AIDOUDI_Projet</output-path>
     <root id="archive" name="ProgAvanceeProjet.jar">
       <element id="module-output" name="ProgAvanceeProjet" />
     </root>

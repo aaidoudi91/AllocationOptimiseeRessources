@@ -337,6 +337,7 @@ public class Colonie {
 
     /**
      * Calcule le nombre de colons jaloux pour une assignation donnée.
+     * Nécessaire pour l'algorithme de la méthode assignerObjets2().
      * @param assignation Une correspondance entre les colons et leurs objets assignés.
      * @return Le nombre total de colons jaloux.
      */
@@ -403,6 +404,7 @@ public class Colonie {
 
     /**
      * Génère toutes les permutations possibles d'une liste donnée.
+     * Nécessaire pour l'algorithme de la méthode assignerObjets3().
      * @param liste La liste des éléments pour lesquels générer les permutations.
      * @return Une liste contenant toutes les permutations possibles.
      */
@@ -414,6 +416,7 @@ public class Colonie {
 
     /**
      * Fonction récursive pour générer les permutations d'une liste.
+     * Nécessaire pour l'algorithme de la méthode assignerObjets3().
      * @param result La liste finale contenant toutes les permutations.
      * @param temp Une liste temporaire pour construire les permutations actuelles.
      * @param liste La liste initiale des éléments à permuter.

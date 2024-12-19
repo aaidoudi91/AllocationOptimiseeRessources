@@ -1,5 +1,6 @@
 README du projet de Programmation Avancée et Application
 Groupe de Nicolas ADAMCZYK & Aaron AIDOUDI
+Le .zip rendu contient une archive .jar exécutable et un dossier src contenant les packages app et test, avec respectivement les classes du projet et les tests unitaires.
 
 
 I) Exécution du programme
@@ -41,11 +42,11 @@ II) Algorithmes de résolution automatique :
 
 
 III) Fonctionnalités
-    a. Fonctionnalités correctement implémentées
+    i. Fonctionnalités correctement implémentées
         - Liées à l'interaction utilisateur - programme : le paramétrage de la colonie via le terminal, le paramétrage de la colonie via un fichier texte, la sauvegarde de la solution dans un fichier texte et la gestion des exceptions dans chacune des fonctionnalités précédentes (erreurs dans l'entrée via le terminal / via le .txt).
         - Liées aux colons : ajout de préférences de ressources, d'une relation, affichage des informations du colon.
         - Liées à la colonie : ajout d'un colon, de relations, verification de la complétude des préférences, assignation des objets (selon les algorithmes de résolution automatique), calculer les colons jaloux, échanger des ressources, définition des noms des colons et des préférences dans le cas de l'entrée par le terminal, affichage des informations de la colonie.
         - Liées aux tests unitaires : placés dans le package test, ces derniers constituent un ensemble le plus complet possible pour chacune des classes du programme.
 
-    b. Fonctionnalités manquantes ou présentant des problèmes
+    ii. Fonctionnalités manquantes ou présentant des problèmes
         - (Bonus) Liées à JavaFX : pas d'interface graphique pour l'application, tout se fait via le terminal et fichier texte.
