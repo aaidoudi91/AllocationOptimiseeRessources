@@ -75,7 +75,7 @@ public class Colonie {
         }
         if (!colon.getPreferences().isEmpty()) {
             colon.supprimerPreferences(); // Si on redéfinit des préférences, on supprime celle deja existantes
-            System.out.println("Suppression des anciennes préférences...");
+            System.out.println("--> Suppression des anciennes préférences...");
         }
         preferences.forEach(colon::ajouterPreference); // Ajoute chaque préférence à la liste des préférences du colon
     }
@@ -292,7 +292,7 @@ public class Colonie {
         // Créer une assignation initiale aléatoire
         Map<Colon, String> meilleureAssignation = new HashMap<>();
         for (Colon colon : colonList) {
-            String objet = objetsDisponibles.remove(0);
+            String objet = objetsDisponibles.removeFirst();
             meilleureAssignation.put(colon, objet);
         }
 
@@ -363,10 +363,10 @@ public class Colonie {
     /**
      * Assigne des objets aux colons selon leurs préférences.
      * Second algorithme de la partie 2 du projet, expliqué en details dans le README.
-     * Attention, la complexité de cet algorithme est O(n!), n le nombre de colons.
+     * Attention, la complexité de cet algorithme est O(n!), avec n le nombre de colons.
      */
     public void assignerObjets3() {
-        System.out.println("Cherche l'assignation optimale...");
+        System.out.println("--> Cherche l'assignation optimale...");
         // Liste des colons et des objets disponibles
         List<Colon> colonList = new ArrayList<>(colons.values());
         List<String> objetsDisponibles = new ArrayList<>(ressources);
@@ -432,7 +432,7 @@ public class Colonie {
             if (temp.contains(liste.get(i))) continue; // Éviter d'ajouter deux fois le même élément
             temp.add(liste.get(i)); // Ajouter l'élément actuel à la permutation temporaire
             permuter(result, temp, liste); // Appel récursif pour compléter la permutation
-            temp.remove(temp.size() - 1); // Retirer l'élément pour explorer d'autres possibilités
+            temp.removeLast(); // Retirer l'élément pour explorer d'autres possibilités
         }
     }
 }

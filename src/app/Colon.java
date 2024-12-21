@@ -68,6 +68,7 @@ public class Colon {
         }
         this.objetAssigne = objet;
     }
+
     public void supprimerPreferences() {
         preferences.clear();
     }

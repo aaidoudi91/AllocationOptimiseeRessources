@@ -47,13 +47,13 @@ public class Menu {
                 }
                 valide = true; // Si pas d'exception, sortie de la boucle
             } catch (NumberFormatException | InputMismatchException e) { // Exception levée si l'entrée n'est pas du type attendu
-                System.err.println("Erreur : veuillez entrer un entier entre 1 et 26.");
+                System.err.println("Erreur : veuillez entrer un entier entre 1 et 26. Réessayer.");
             }
         }
 
         colonie.setColons(nombreColons); // Défini les colons avec les lettres A, B, C, ...
         colonie.setRessources(nombreColons); // Défini les ressources avec les numéros 1, 2, 3, ...
-        System.out.println("--> " + nombreColons + " colons ajoutés de noms suivant les lettres de l'alphabet.\n");
+        System.out.println("--> " + nombreColons + " colons ajoutés, de noms suivant les lettres de l'alphabet.\n");
 
 
         // Partie A
@@ -124,6 +124,7 @@ public class Menu {
 
                 case 3:
                     if (colonie.verifierPreferencesCompletes()) { // Si les préférences sont completes, on affiche le résultat
+                        System.out.println("\n");
                         colonie.assignerObjets3();
                         System.out.println(colonie);
                         fin = true;
@@ -163,13 +164,14 @@ public class Menu {
                             colonie.echangerRessources(nom1, nom2);
                             valide = true; // Si pas d'exception, sortie de la boucle
                             System.out.println("--> L'échange a été éffectué.\n");
+                            System.out.println(colonie);
                         } catch (Exception e) {
                             System.err.println("Erreur : " + e.getMessage() + " Réessayer.");
                         }
                     }
                     break;
                 case 2:
-                    System.out.println("Nombre de colons jaloux : " + colonie.calculerColonsJaloux());
+                    System.out.println("\nNombre de colons jaloux : " + colonie.calculerColonsJaloux() + "\n");
                     break;
                 case 3:
                     System.out.println("Fin du programme.");
@@ -178,7 +180,6 @@ public class Menu {
                 default:
                     System.out.println("Option invalide. Réessayer.");
             }
-            System.out.println(colonie);
         }
         scanner.close();
     }
@@ -259,7 +260,7 @@ public class Menu {
     }
 
     /**
-     * Choix dans un menu à 3 options.
+     * Choix dans un menu à 3 options, utilisé plusieurs fois dans les deux méthodes avecFichier & sansFichier.
      * @param scanner le scanner ouvert lors du choix.
      * @param choix l'entier choisi par l'utilisateur.
      * @param valide le boolean valant false tant que l'entrée n'est pas conforme.
