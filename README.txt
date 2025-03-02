@@ -47,7 +47,7 @@ III) Fonctionnalités
         - Liées à l'interaction entre l'utilisateur et le programme : le paramétrage de la colonie via le terminal, le paramétrage de la colonie via un fichier texte, la sauvegarde de la solution dans un fichier texte, ainsi que toutes les fonctionnalités décrites dans le sujet, et la gestion des exceptions dans chacune des fonctionnalités précédentes (erreurs dans l'entrée via le terminal / via le .txt).
         - Liées aux colons : ajout de préférences de ressources, d'une relation, affichage des informations du colon.
         - Liées à la colonie : ajout d'un colon, de relations, verification de la complétude des préférences, assignation des objets (selon les algorithmes de résolution automatique), calculer les colons jaloux, échanger des ressources, définition des noms des colons et des préférences dans le cas de l'entrée par le terminal, affichage des informations de la colonie.
-        - Liées aux tests unitaires : placés dans le package test, ces derniers constituent un ensemble le plus complet possible pour chacune des classes du programme.
+        - (Bonus) Liées aux tests unitaires : placés dans le package test, ces derniers constituent un ensemble le plus complet possible pour chacune des classes du programme.
 
     ii. Fonctionnalités manquantes ou présentant des problèmes
         - (Bonus) Liées à JavaFX : pas d'interface graphique pour l'application, tout se fait via le terminal et fichier texte.
