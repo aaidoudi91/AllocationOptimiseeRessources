@@ -1,6 +1,6 @@
 README du projet de Programmation Avancée et Application
 Groupe de Nicolas ADAMCZYK & Aaron AIDOUDI
-Le .zip rendu contient une archive .jar exécutable, et un dossier src contenant les packages app et test, avec respectivement les classes du projet et les tests unitaires.
+Le .zip rendu contient une archive .jar exécutable, un dossier src contenant les packages app et test, avec respectivement les classes du projet et les tests unitaires, ainsi que le sujet du projet Sujet.pdf et une colonie colonie.txt
 
 
 I) Exécution du programme
