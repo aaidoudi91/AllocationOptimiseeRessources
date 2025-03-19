@@ -57,5 +57,7 @@ Dans les deux cas, [chemin_du_fichier] est un fichier .txt du même type que cel
 - Tests unitaires pour assurer la robustesse.
 
 
----
-Projet réalisé par Aidoudi Aaron
+## Auteur & Crédits
+Projet réalisé dans le cadre pédagogique de l'UE de Programmation Avancée
+
+Auteur : Aidoudi Aaron
