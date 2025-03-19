@@ -8,7 +8,7 @@ Ce projet implémente un algorithme d'allocation optimisée des ressources en fo
 - Le sujet du projet `Sujet.pdf`
 - Un fichier d'exemple `colonie.txt`
 
-## I) Exécution du programme
+## Exécution du programme
 Le programme est divisé en 4 Classes placées dans le package `app` :
 - `Main`, prenant ou non en paramètre un unique argument indiquant le chemin du fichier texte avec les informations de la colonie et servant uniquement à lancer la classe Menu via sa méthode main.
 - `Menu`, faisant le lien entre l'utilisateur (via le terminal et le fichier texte) et les classes Colon et Colonie. 
@@ -33,7 +33,7 @@ Le programme comprend également des tests unitaires situés dans le package `te
 
 Dans les deux cas, [chemin_du_fichier] est un fichier .txt du même type que celui donné (`colonie.txt`) optionnel.
 
-## II) Algorithmes d'allocation
+## Algorithmes d'allocation
 ### 1. Algorithme naïf
 - Attribue les ressources en parcourant chaque individu et en lui attribuant son premier choix disponible.
 - Ignorance des relations et des conflits.
@@ -48,7 +48,7 @@ Dans les deux cas, [chemin_du_fichier] est un fichier .txt du même type que cel
 - Sélectionne l'affectation minimisant la jalousie.
 - Complexité en `O(n!)`, utilisable uniquement pour de petites instances.
 
-## III) Fonctionnalités
+## Fonctionnalités
 ### Fonctionnalités implémentées
 - Gestion des entrées via terminal et fichier texte.
 - Sauvegarde de l'affectation dans un fichier.
